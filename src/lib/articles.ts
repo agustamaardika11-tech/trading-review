@@ -12,6 +12,67 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'forecast-xauusd-intraday-22-juni-2026',
+    image: '/images/xauusd.svg',
+    title: 'Forecast XAUUSD Intraday 22 Juni 2026: Emas Konsolidasi di Awal Pekan',
+    excerpt:
+      'Analisis intraday XAUUSD Minggu, 22 Juni 2026. Emas berpotensi sideways menjelang data PMI dan Core PCE pekan ini. Perhatikan area $3,290–$3,350.',
+    category: 'strategi' as const,
+    date: '2026-06-22',
+    author: 'Tim TradingReview',
+    readTime: '5 menit',
+    content: `<h2>Recap Sesi Sebelumnya</h2>
+<p>Harga emas ditutup di area $3,310 pada akhir pekan lalu setelah sempat menguji resistance $3,350 di sesi New York hari Jumat. Tekanan jual muncul menjelang penutupan mingguan, namun buyer berhasil mempertahankan harga di atas support $3,290. Secara mingguan, emas masih mencatat kenaikan sekitar 0.8%.</p>
+
+<h2>Level Kunci Hari Ini</h2>
+<h3>Resistance</h3>
+<ul>
+<li><strong>R3:</strong> $3,385 — high bulan ini, target jika momentum bullish kuat</li>
+<li><strong>R2:</strong> $3,350 — resistance utama, level yang gagal ditembus Jumat lalu</li>
+<li><strong>R1:</strong> $3,330 — resistance minor, area supply intraday</li>
+</ul>
+<h3>Support</h3>
+<ul>
+<li><strong>S1:</strong> $3,300 — support psikologis, area pivot harian</li>
+<li><strong>S2:</strong> $3,290 — support kunci, low akhir pekan lalu</li>
+<li><strong>S3:</strong> $3,250 — support mayor, MA 50 daily</li>
+</ul>
+
+<h2>Bias Intraday</h2>
+<p>Bias hari ini cenderung <strong>netral ke bullish</strong>. Emas membuka pekan baru setelah closing positif minggu lalu. Harga masih bergerak di atas MA 50 dan MA 200 di timeframe H4, mengindikasikan tren bullish masih intact. Namun, volume trading biasanya rendah di awal pekan — terutama di hari Minggu ketika hanya sesi Asia dan Pasifik yang aktif.</p>
+<p>RSI H4 berada di level 55, menunjukkan momentum moderat tanpa kondisi overbought. Stochastic menunjukkan potensi golden cross di area netral, yang bisa menjadi katalis kenaikan jika terkonfirmasi.</p>
+
+<h2>Skenario Trading</h2>
+<h3>Skenario Buy</h3>
+<p><strong>Entry Zone:</strong> $3,295–$3,305 (area support + pullback ke pivot)</p>
+<p><strong>Stop Loss:</strong> $3,280 (di bawah S2)</p>
+<p><strong>Take Profit 1:</strong> $3,330 (R1)</p>
+<p><strong>Take Profit 2:</strong> $3,350 (R2)</p>
+<p><strong>Risk-Reward:</strong> 1:2 minimum</p>
+<p>Konfirmasi entry: bullish engulfing atau pin bar di area support pada timeframe M15/M30.</p>
+
+<h3>Skenario Sell</h3>
+<p><strong>Entry Zone:</strong> $3,345–$3,355 (rejection di area resistance R2)</p>
+<p><strong>Stop Loss:</strong> $3,370 (di atas R2)</p>
+<p><strong>Take Profit 1:</strong> $3,315 (area tengah range)</p>
+<p><strong>Take Profit 2:</strong> $3,295 (S1-S2)</p>
+<p><strong>Risk-Reward:</strong> 1:2 minimum</p>
+<p>Konfirmasi entry: bearish rejection candle atau double top di area resistance pada timeframe M15/M30.</p>
+
+<h2>Event Ekonomi Hari Ini</h2>
+<ul>
+<li><strong>Minggu/Senin dini hari:</strong> Pembukaan pasar — perhatikan gap opening jika ada perubahan sentimen over the weekend</li>
+<li><strong>07:30 WIB:</strong> Sesi Asia dibuka — volume rendah, pergerakan terbatas</li>
+<li><strong>14:00 WIB:</strong> Sesi London — biasanya volatilitas mulai meningkat</li>
+</ul>
+<p>Tidak ada rilis data high-impact hari ini (Minggu). Fokus utama pekan ini ada di <strong>Flash PMI (Selasa)</strong> dan <strong>Core PCE (Jumat)</strong> yang bisa menjadi game-changer untuk arah emas.</p>
+
+<h2>Kesimpulan</h2>
+<p>XAUUSD kemungkinan bergerak dalam range $3,290–$3,350 hari ini dengan volume rendah. Tunggu rejection di level-level kunci sebelum entry. Peluang terbaik muncul saat sesi London dibuka.</p>
+
+<p><em><strong>Disclaimer:</strong> Analisis ini berdasarkan framework teknikal umum dan BUKAN berdasarkan data harga real-time. Gunakan sebagai referensi edukasi saja, bukan sebagai saran trading. Selalu lakukan riset mandiri dan konfirmasi dengan data terkini sebelum mengambil keputusan trading.</em></p>`,
+  },
+  {
     slug: 'tips-pengembangan-ea-lanjutan-mql5',
     image: '/images/ea-robot.svg',
     title: 'Tips Pengembangan EA Lanjutan: Dari EA Sederhana ke EA Profesional',
