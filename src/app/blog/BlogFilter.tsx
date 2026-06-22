@@ -58,6 +58,15 @@ export default function BlogFilter({ articles }: { articles: Article[] }) {
             href={`/blog/${article.slug}`}
             className="group block rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-lg transition-shadow"
           >
+            {article.image && (
+              <div className="h-40 overflow-hidden bg-slate-100">
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            )}
             <div className="p-6">
               <span
                 className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 ${BADGE_COLORS[article.category]}`}

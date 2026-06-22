@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { comparisons } from "@/lib/comparisons";
 import { brokers } from "@/lib/brokers";
 import type { Metadata } from "next";
@@ -13,15 +14,20 @@ export default function ComparePage() {
   return (
     <main className="min-h-screen bg-white">
       <section className="bg-blue-700 text-white py-16">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">
-            Perbandingan Broker Trading
-          </h1>
-          <p className="text-lg text-blue-100 max-w-2xl mx-auto">
-            Bandingkan broker trading populer secara berdampingan. Lihat
-            perbedaan spread, leverage, regulasi, dan fitur lainnya untuk
-            menemukan broker terbaik.
-          </p>
+        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-4xl font-bold mb-4">
+              Perbandingan Broker Trading
+            </h1>
+            <p className="text-lg text-blue-100 max-w-2xl">
+              Bandingkan broker trading populer secara berdampingan. Lihat
+              perbedaan spread, leverage, regulasi, dan fitur lainnya untuk
+              menemukan broker terbaik.
+            </p>
+          </div>
+          <div className="w-48 md:w-64 shrink-0">
+            <Image src="/images/compare.svg" alt="Broker comparison" width={400} height={300} className="w-full h-auto" />
+          </div>
         </div>
       </section>
 

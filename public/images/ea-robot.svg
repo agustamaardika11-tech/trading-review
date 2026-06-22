@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" fill="none">
+  <rect width="400" height="250" rx="16" fill="#0f172a"/>
+  <!-- Monitor -->
+  <rect x="100" y="30" width="200" height="140" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+  <rect x="110" y="40" width="180" height="110" rx="6" fill="#0f172a"/>
+  <!-- Code lines -->
+  <text x="120" y="60" fill="#818cf8" font-size="9" font-family="monospace">void</text>
+  <text x="148" y="60" fill="#f472b6" font-size="9" font-family="monospace">OnTick</text>
+  <text x="192" y="60" fill="#94a3b8" font-size="9" font-family="monospace">() {</text>
+  <text x="130" y="75" fill="#818cf8" font-size="9" font-family="monospace">if</text>
+  <text x="144" y="75" fill="#94a3b8" font-size="9" font-family="monospace">(bullishCross) {</text>
+  <text x="140" y="90" fill="#34d399" font-size="9" font-family="monospace">trade</text>
+  <text x="172" y="90" fill="#94a3b8" font-size="9" font-family="monospace">.</text>
+  <text x="176" y="90" fill="#fbbf24" font-size="9" font-family="monospace">Buy</text>
+  <text x="196" y="90" fill="#94a3b8" font-size="9" font-family="monospace">(lot, sl, tp);</text>
+  <text x="130" y="105" fill="#94a3b8" font-size="9" font-family="monospace">}</text>
+  <text x="130" y="120" fill="#818cf8" font-size="9" font-family="monospace">if</text>
+  <text x="144" y="120" fill="#94a3b8" font-size="9" font-family="monospace">(bearishCross) {</text>
+  <text x="140" y="135" fill="#ef4444" font-size="9" font-family="monospace">trade</text>
+  <text x="172" y="135" fill="#94a3b8" font-size="9" font-family="monospace">.</text>
+  <text x="176" y="135" fill="#fbbf24" font-size="9" font-family="monospace">Sell</text>
+  <text x="198" y="135" fill="#94a3b8" font-size="9" font-family="monospace">(lot, sl, tp);</text>
+  <!-- Monitor stand -->
+  <rect x="175" y="170" width="50" height="8" rx="2" fill="#334155"/>
+  <rect x="160" y="178" width="80" height="6" rx="3" fill="#475569"/>
+  <!-- Robot icon -->
+  <circle cx="330" cy="80" r="30" fill="#1e40af" opacity="0.3"/>
+  <rect x="312" y="62" width="36" height="30" rx="8" fill="#3b82f6"/>
+  <circle cx="322" cy="75" r="4" fill="white"/>
+  <circle cx="338" cy="75" r="4" fill="white"/>
+  <circle cx="322" cy="75" r="2" fill="#0f172a"/>
+  <circle cx="338" cy="75" r="2" fill="#0f172a"/>
+  <rect x="325" y="85" width="10" height="3" rx="1.5" fill="#93c5fd"/>
+  <!-- Antenna -->
+  <line x1="330" y1="62" x2="330" y2="50" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="330" cy="47" r="4" fill="#fbbf24"/>
+  <!-- Signal waves -->
+  <path d="M345,55 Q355,45 345,35" stroke="#60a5fa" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M350,58 Q363,45 350,32" stroke="#60a5fa" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <!-- Status -->
+  <circle cx="120" cy="210" r="5" fill="#34d399"/>
+  <text x="130" y="213" fill="#34d399" font-size="10" font-family="system-ui" font-weight="600">EA Active — 3 trades today</text>
+  <!-- Profit -->
+  <text x="120" y="233" fill="#94a3b8" font-size="9" font-family="system-ui">P/L: </text>
+  <text x="143" y="233" fill="#34d399" font-size="11" font-family="monospace" font-weight="700">+$127.50</text>
+</svg>

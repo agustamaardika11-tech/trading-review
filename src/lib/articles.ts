@@ -13,6 +13,7 @@ export interface Article {
 export const articles: Article[] = [
   {
     slug: 'tips-pengembangan-ea-lanjutan-mql5',
+    image: '/images/ea-robot.svg',
     title: 'Tips Pengembangan EA Lanjutan: Dari EA Sederhana ke EA Profesional',
     excerpt:
       'Tingkatkan EA Anda dengan teknik lanjutan: trailing stop otomatis, risk management dinamis, multi-timeframe analysis, dan optimasi performa.',
@@ -173,6 +174,7 @@ if(!IsTradeTime()) return;  // Skip jika di luar jam trading</code></pre>
   },
   {
     slug: 'kesalahan-umum-pemula-trading-forex',
+    image: '/images/blog-edukasi.svg',
     title: '10 Kesalahan Umum Pemula dalam Trading Forex (Dan Cara Menghindarinya)',
     excerpt:
       'Pelajari kesalahan fatal yang sering dilakukan trader pemula dan bagaimana cara menghindarinya agar tidak kehilangan modal di awal perjalanan trading.',
@@ -280,6 +282,7 @@ if(!IsTradeTime()) return;  // Skip jika di luar jam trading</code></pre>
   },
   {
     slug: 'tutorial-membuat-ea-expert-advisor-sendiri-mql5',
+    image: '/images/ea-robot.svg',
     title: 'Tutorial Membuat EA (Expert Advisor) Sendiri dengan MQL5',
     excerpt:
       'Panduan lengkap step-by-step membuat Expert Advisor pertama Anda di MetaTrader 5 menggunakan bahasa MQL5, dari nol hingga siap backtest.',
@@ -465,6 +468,7 @@ int OnInit()
   },
   {
     slug: 'forecast-xauusd-minggu-ini-23-27-juni-2026',
+    image: '/images/xauusd.svg',
     title: 'Forecast XAUUSD Minggu Ini (23–27 Juni 2026): Emas Berpotensi Lanjutkan Rally',
     excerpt:
       'Analisis teknikal dan fundamental XAUUSD untuk minggu 23–27 Juni 2026. Level support, resistance, dan skenario trading yang perlu diperhatikan.',
@@ -519,6 +523,7 @@ int OnInit()
   },
   {
     slug: 'apa-itu-forex-trading-panduan-lengkap-pemula',
+    image: '/images/hero-trading.svg',
     title: 'Apa Itu Forex Trading? Panduan Lengkap untuk Pemula',
     excerpt:
       'Pelajari dasar-dasar forex trading, cara kerja pasar valuta asing, dan langkah awal untuk memulai trading forex dengan aman.',
@@ -562,6 +567,7 @@ int OnInit()
   },
   {
     slug: 'cara-memilih-broker-aman-terpercaya',
+    image: '/images/compare.svg',
     title: 'Cara Memilih Broker yang Aman dan Terpercaya',
     excerpt:
       'Panduan lengkap memilih broker forex yang teregulasi, aman, dan sesuai kebutuhan trading Anda.',
@@ -607,6 +613,7 @@ int OnInit()
   },
   {
     slug: 'manajemen-risiko-kunci-sukses-trading',
+    image: '/images/calculator.svg',
     title: 'Manajemen Risiko: Kunci Sukses Trading',
     excerpt:
       'Pelajari teknik manajemen risiko yang efektif untuk melindungi modal dan memaksimalkan profit dalam trading.',
@@ -652,6 +659,7 @@ int OnInit()
   },
   {
     slug: 'memahami-analisis-teknikal-dasar',
+    image: '/images/hero-trading.svg',
     title: 'Memahami Analisis Teknikal Dasar',
     excerpt:
       'Kenali indikator teknikal populer, pola chart, dan cara membaca grafik harga untuk pengambilan keputusan trading.',
@@ -698,6 +706,7 @@ int OnInit()
   },
   {
     slug: 'perbedaan-akun-standard-micro-ecn',
+    image: '/images/compare.svg',
     title: 'Perbedaan Akun Standard, Micro, dan ECN',
     excerpt:
       'Pahami perbedaan jenis akun trading untuk memilih yang paling sesuai dengan gaya dan modal trading Anda.',
@@ -753,6 +762,7 @@ int OnInit()
   },
   {
     slug: 'tips-money-management-trader-pemula',
+    image: '/images/calculator.svg',
     title: 'Tips Money Management untuk Trader Pemula',
     excerpt:
       'Strategi pengelolaan modal yang wajib dipahami setiap trader pemula agar bisa bertahan dan berkembang di pasar.',

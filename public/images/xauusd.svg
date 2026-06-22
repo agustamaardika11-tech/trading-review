@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" fill="none">
+  <rect width="400" height="250" rx="16" fill="#1a1a2e"/>
+  <!-- Grid -->
+  <line x1="40" y1="30" x2="40" y2="220" stroke="#334155" stroke-width="0.5"/>
+  <line x1="110" y1="30" x2="110" y2="220" stroke="#334155" stroke-width="0.5"/>
+  <line x1="180" y1="30" x2="180" y2="220" stroke="#334155" stroke-width="0.5"/>
+  <line x1="250" y1="30" x2="250" y2="220" stroke="#334155" stroke-width="0.5"/>
+  <line x1="320" y1="30" x2="320" y2="220" stroke="#334155" stroke-width="0.5"/>
+  <line x1="40" y1="60" x2="370" y2="60" stroke="#334155" stroke-width="0.5"/>
+  <line x1="40" y1="100" x2="370" y2="100" stroke="#334155" stroke-width="0.5"/>
+  <line x1="40" y1="140" x2="370" y2="140" stroke="#334155" stroke-width="0.5"/>
+  <line x1="40" y1="180" x2="370" y2="180" stroke="#334155" stroke-width="0.5"/>
+  <!-- Gold price line -->
+  <path d="M40,180 L60,170 L80,175 L100,155 L120,140 L140,145 L160,120 L180,110 L200,115 L220,95 L240,85 L260,90 L280,70 L300,65 L320,75 L340,55 L360,50" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Glow effect -->
+  <path d="M40,180 L60,170 L80,175 L100,155 L120,140 L140,145 L160,120 L180,110 L200,115 L220,95 L240,85 L260,90 L280,70 L300,65 L320,75 L340,55 L360,50" stroke="#fbbf24" stroke-width="6" fill="none" stroke-opacity="0.2" stroke-linecap="round"/>
+  <!-- Area fill -->
+  <path d="M40,180 L60,170 L80,175 L100,155 L120,140 L140,145 L160,120 L180,110 L200,115 L220,95 L240,85 L260,90 L280,70 L300,65 L320,75 L340,55 L360,50 L360,220 L40,220 Z" fill="url(#goldGrad)"/>
+  <defs>
+    <linearGradient id="goldGrad" x1="200" y1="50" x2="200" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Support line -->
+  <line x1="40" y1="180" x2="370" y2="180" stroke="#ef4444" stroke-width="1" stroke-dasharray="6 3" stroke-opacity="0.7"/>
+  <text x="372" y="183" fill="#ef4444" font-size="8" font-family="monospace">S1: $3,290</text>
+  <!-- Resistance line -->
+  <line x1="40" y1="50" x2="370" y2="50" stroke="#34d399" stroke-width="1" stroke-dasharray="6 3" stroke-opacity="0.7"/>
+  <text x="372" y="53" fill="#34d399" font-size="8" font-family="monospace">R1: $3,350</text>
+  <!-- XAUUSD label -->
+  <text x="50" y="25" fill="#fbbf24" font-size="16" font-family="system-ui" font-weight="800">XAUUSD</text>
+  <text x="145" y="25" fill="#34d399" font-size="12" font-family="monospace">▲ $3,310.50</text>
+  <!-- Price dot -->
+  <circle cx="360" cy="50" r="4" fill="#fbbf24"/>
+  <circle cx="360" cy="50" r="8" fill="#fbbf24" opacity="0.3"/>
+</svg>

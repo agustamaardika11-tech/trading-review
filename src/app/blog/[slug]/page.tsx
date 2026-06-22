@@ -87,6 +87,16 @@ export default async function ArticlePage({
           {article.title}
         </h1>
 
+        {article.image && (
+          <div className="rounded-2xl overflow-hidden mb-8 bg-slate-100">
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-auto max-h-72 object-cover"
+            />
+          </div>
+        )}
+
         <div className="flex items-center gap-4 text-sm text-slate-500 mb-10">
           <span>{article.author}</span>
           <span>&middot;</span>
