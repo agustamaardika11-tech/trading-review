@@ -12,6 +12,273 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'tips-pengembangan-ea-lanjutan-mql5',
+    title: 'Tips Pengembangan EA Lanjutan: Dari EA Sederhana ke EA Profesional',
+    excerpt:
+      'Tingkatkan EA Anda dengan teknik lanjutan: trailing stop otomatis, risk management dinamis, multi-timeframe analysis, dan optimasi performa.',
+    category: 'strategi',
+    date: '2026-06-22',
+    author: 'Tim TradingReview',
+    readTime: '10 menit',
+    content: `<h2>Mengapa EA Sederhana Belum Cukup?</h2>
+<p>EA dengan strategi dasar seperti MA crossover memang bisa menghasilkan profit di kondisi market tertentu. Namun, pasar forex sangat dinamis — strategi yang bekerja di trending market bisa menghasilkan kerugian besar saat market sideways. Artikel ini membahas teknik lanjutan untuk membuat EA Anda lebih robust dan adaptif.</p>
+
+<h2>1. Trailing Stop Otomatis</h2>
+<p>Trailing stop menggeser stop loss mengikuti harga untuk mengamankan profit yang sudah berjalan. Ini jauh lebih efektif dibanding take profit statis.</p>
+<pre><code>void ManageTrailingStop(int trailPoints)
+{
+   double point = SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+
+   for(int i = PositionsTotal() - 1; i >= 0; i--)
+   {
+      if(PositionGetSymbol(i) != _Symbol) continue;
+      if(PositionGetInteger(POSITION_MAGIC) != MagicNumber) continue;
+
+      double openPrice = PositionGetDouble(POSITION_PRICE_OPEN);
+      double currentSL = PositionGetDouble(POSITION_SL);
+      double currentTP = PositionGetDouble(POSITION_TP);
+      ulong ticket = PositionGetInteger(POSITION_TICKET);
+
+      if(PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY)
+      {
+         double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+         double newSL = bid - trailPoints * point;
+         if(newSL > currentSL && newSL > openPrice)
+            trade.PositionModify(ticket, newSL, currentTP);
+      }
+      else
+      {
+         double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+         double newSL = ask + trailPoints * point;
+         if(newSL < currentSL && newSL < openPrice)
+            trade.PositionModify(ticket, newSL, currentTP);
+      }
+   }
+}</code></pre>
+<p>Panggil fungsi ini di <strong>OnTick()</strong> setelah logika entry. Trailing stop akan otomatis mengunci profit saat harga bergerak sesuai arah posisi Anda.</p>
+
+<h2>2. Risk Management Dinamis</h2>
+<p>Daripada menggunakan lot size tetap, hitung lot berdasarkan persentase risiko dari balance akun. Ini membuat EA Anda scale up saat profit dan scale down saat loss.</p>
+<pre><code>double CalculateLotSize(double riskPercent, int slPoints)
+{
+   double balance = AccountInfoDouble(ACCOUNT_BALANCE);
+   double riskAmount = balance * riskPercent / 100.0;
+
+   double tickValue = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
+   double tickSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_SIZE);
+   double point = SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+
+   double pipValue = tickValue * (point / tickSize);
+   double lots = riskAmount / (slPoints * pipValue);
+
+   double minLot = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+   double maxLot = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MAX);
+   double stepLot = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_STEP);
+
+   lots = MathFloor(lots / stepLot) * stepLot;
+   lots = MathMax(minLot, MathMin(maxLot, lots));
+
+   return lots;
+}</code></pre>
+<p>Contoh penggunaan: <code>double lot = CalculateLotSize(1.0, 100);</code> artinya risiko 1% dari balance dengan stop loss 100 points.</p>
+
+<h2>3. Multi-Timeframe Confirmation</h2>
+<p>Sinyal dari satu timeframe saja sering menghasilkan false signal. Konfirmasi dari timeframe yang lebih besar meningkatkan akurasi secara signifikan.</p>
+<pre><code>bool IsTrendUp(ENUM_TIMEFRAMES tf)
+{
+   int maHandle = iMA(_Symbol, tf, 200, 0, MODE_EMA, PRICE_CLOSE);
+   double maValue[];
+   ArraySetAsSeries(maValue, true);
+   CopyBuffer(maHandle, 0, 0, 1, maValue);
+   IndicatorRelease(maHandle);
+
+   double price = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   return price > maValue[0];
+}
+
+// Di OnTick():
+// Hanya ambil sinyal BUY jika tren H4 juga bullish
+if(bullishCross && IsTrendUp(PERIOD_H4) && !hasPosition)
+{
+   // Entry buy...
+}</code></pre>
+<p>Prinsipnya: <strong>entry di timeframe kecil, konfirmasi di timeframe besar</strong>. Misalnya entry di M15, konfirmasi tren di H4.</p>
+
+<h2>4. Time Filter</h2>
+<p>Tidak semua jam trading menguntungkan. Spread melebar dan likuiditas rendah di luar sesi utama bisa merusak performa EA.</p>
+<pre><code>bool IsTradeTime()
+{
+   MqlDateTime dt;
+   TimeCurrent(dt);
+   int hour = dt.hour;
+
+   // Hanya trading di sesi London dan New York (08:00 - 20:00 GMT)
+   return (hour >= 8 && hour < 20);
+}
+
+// Di OnTick():
+if(!IsTradeTime()) return;  // Skip jika di luar jam trading</code></pre>
+<p>Anda juga bisa menambahkan filter untuk menghindari hari Jumat sore (menjelang penutupan market) dan hari Senin pagi (saat market baru buka dan spread masih lebar).</p>
+
+<h2>5. News Filter</h2>
+<p>EA sering mengalami kerugian saat ada rilis berita besar karena pergerakan harga yang sangat volatil dan spread yang melebar. Cara sederhana mengatasinya:</p>
+<ul>
+<li>Gunakan library <strong>MQL5 Calendar</strong> bawaan untuk mendeteksi jadwal berita</li>
+<li>Stop trading 30 menit sebelum dan sesudah berita high-impact</li>
+<li>Atau tutup semua posisi terbuka sebelum berita besar seperti NFP atau FOMC</li>
+</ul>
+
+<h2>6. Logging dan Monitoring</h2>
+<p>EA profesional selalu mencatat setiap aksi untuk debugging dan analisis:</p>
+<pre><code>void LogTrade(string action, double price, double lot, double sl, double tp)
+{
+   string msg = StringFormat("[%s] %s %.2f lots @ %.5f | SL: %.5f | TP: %.5f",
+                              TimeToString(TimeCurrent()), action, lot, price, sl, tp);
+   Print(msg);
+
+   // Optional: tulis ke file
+   int fileHandle = FileOpen("EA_Log.txt", FILE_WRITE|FILE_READ|FILE_TXT|FILE_ANSI);
+   if(fileHandle != INVALID_HANDLE)
+   {
+      FileSeek(fileHandle, 0, SEEK_END);
+      FileWriteString(fileHandle, msg + "\\n");
+      FileClose(fileHandle);
+   }
+}</code></pre>
+
+<h2>7. Walk-Forward Optimization</h2>
+<p>Backtest biasa rentan terhadap over-optimization. Gunakan metode <strong>walk-forward</strong>:</p>
+<ol>
+<li>Bagi data historis menjadi segmen (misalnya per 3 bulan)</li>
+<li>Optimasi parameter di segmen pertama (in-sample)</li>
+<li>Test parameter tersebut di segmen berikutnya (out-of-sample)</li>
+<li>Ulangi untuk semua segmen</li>
+<li>Jika EA konsisten profit di semua segmen out-of-sample, strateginya robust</li>
+</ol>
+<p>MT5 Strategy Tester mendukung walk-forward optimization secara built-in.</p>
+
+<h2>Checklist EA Profesional</h2>
+<ul>
+<li>✅ Risk management dinamis (lot berdasarkan % balance)</li>
+<li>✅ Trailing stop untuk mengamankan profit</li>
+<li>✅ Multi-timeframe confirmation</li>
+<li>✅ Time filter (hindari jam spread tinggi)</li>
+<li>✅ News filter (hindari volatilitas berita)</li>
+<li>✅ Logging lengkap untuk debugging</li>
+<li>✅ Walk-forward optimization (bukan hanya backtest biasa)</li>
+<li>✅ Test di akun demo minimal 3 bulan sebelum live</li>
+</ul>
+
+<p><em><strong>Disclaimer:</strong> Artikel ini bersifat edukatif. Tidak ada EA yang bisa menjamin profit. Selalu test secara menyeluruh dan gunakan risk management yang ketat.</em></p>`,
+  },
+  {
+    slug: 'kesalahan-umum-pemula-trading-forex',
+    title: '10 Kesalahan Umum Pemula dalam Trading Forex (Dan Cara Menghindarinya)',
+    excerpt:
+      'Pelajari kesalahan fatal yang sering dilakukan trader pemula dan bagaimana cara menghindarinya agar tidak kehilangan modal di awal perjalanan trading.',
+    category: 'edukasi',
+    date: '2026-06-22',
+    author: 'Tim TradingReview',
+    readTime: '9 menit',
+    content: `<h2>Mengapa 90% Trader Pemula Gagal?</h2>
+<p>Statistik menunjukkan bahwa sekitar 90% trader retail kehilangan uang. Bukan karena forex itu scam, melainkan karena kebanyakan pemula melakukan kesalahan yang sebenarnya bisa dihindari. Berikut adalah 10 kesalahan paling umum dan cara mengatasinya.</p>
+
+<h2>1. Trading Tanpa Rencana</h2>
+<p><strong>Kesalahan:</strong> Membuka posisi berdasarkan feeling, rumor, atau sinyal dari grup Telegram tanpa memahami alasannya.</p>
+<p><strong>Solusi:</strong> Buat trading plan tertulis yang mencakup:</p>
+<ul>
+<li>Pair yang ditradingkan dan alasannya</li>
+<li>Kriteria entry dan exit yang spesifik</li>
+<li>Risk per trade (1-2% dari modal)</li>
+<li>Target harian/mingguan yang realistis</li>
+</ul>
+<p>Jika setup tidak sesuai dengan plan, <strong>jangan trading</strong>. Disiplin mengikuti plan jauh lebih penting daripada mencari "peluang" baru setiap saat.</p>
+
+<h2>2. Tidak Menggunakan Stop Loss</h2>
+<p><strong>Kesalahan:</strong> Membiarkan posisi floating minus tanpa batas, berharap harga akan kembali. Ini adalah cara tercepat untuk menghapus seluruh akun.</p>
+<p><strong>Solusi:</strong> Selalu pasang stop loss di <strong>setiap</strong> posisi. Tentukan stop loss sebelum entry, bukan sesudahnya. Stop loss bukan tanda kelemahan — ini adalah alat proteksi modal yang digunakan oleh semua trader profesional.</p>
+
+<h2>3. Overtrading</h2>
+<p><strong>Kesalahan:</strong> Membuka terlalu banyak posisi dalam sehari, terutama setelah mengalami kerugian (revenge trading).</p>
+<p><strong>Solusi:</strong> Batasi jumlah trade per hari (misalnya maksimal 3 trade). Jika sudah loss 2x berturut-turut, berhenti trading untuk hari itu. Kualitas trade jauh lebih penting daripada kuantitas.</p>
+
+<h2>4. Leverage Terlalu Tinggi</h2>
+<p><strong>Kesalahan:</strong> Menggunakan leverage 1:1000 atau lebih dengan modal kecil, sehingga pergerakan kecil saja bisa menghabiskan seluruh modal.</p>
+<p><strong>Solusi:</strong> Untuk pemula, gunakan leverage efektif tidak lebih dari <strong>1:10 sampai 1:20</strong>. Meskipun broker menawarkan leverage 1:1000, bukan berarti Anda harus menggunakannya. Leverage tinggi memperbesar profit DAN loss.</p>
+<p>Contoh: Modal $100 dengan leverage 1:1000, Anda bisa buka posisi $100,000. Pergerakan 0.1% saja sudah menyebabkan loss $100 — seluruh modal Anda.</p>
+
+<h2>5. Tidak Belajar Analisis</h2>
+<p><strong>Kesalahan:</strong> Langsung trading real tanpa memahami analisis teknikal maupun fundamental. Mengandalkan sinyal orang lain tanpa mengerti alasannya.</p>
+<p><strong>Solusi:</strong> Investasikan waktu minimal 3 bulan untuk belajar:</p>
+<ul>
+<li>Cara membaca candlestick dan chart pattern</li>
+<li>Support dan resistance</li>
+<li>Minimal 2-3 indikator (MA, RSI, MACD)</li>
+<li>Dasar analisis fundamental (dampak berita ekonomi)</li>
+</ul>
+<p>Gunakan akun demo selama proses belajar. Uang yang Anda "hemat" dengan tidak belajar, akan Anda "bayar" lewat kerugian trading.</p>
+
+<h2>6. Mengabaikan Money Management</h2>
+<p><strong>Kesalahan:</strong> Menggunakan lot size terlalu besar relatif terhadap modal. Misalnya buka 0.1 lot dengan modal $100.</p>
+<p><strong>Solusi:</strong> Terapkan aturan 1-2% risk per trade. Dengan modal $100:</p>
+<ul>
+<li>Risiko per trade: $1-$2</li>
+<li>Lot size: 0.01 (micro lot)</li>
+<li>Stop loss: sesuaikan dengan analisis, bukan dengan sisa margin</li>
+</ul>
+<p>Gunakan <strong>kalkulator lot size</strong> di halaman <a href="/kalkulator">Kalkulator Trading</a> kami untuk menghitung ukuran posisi yang tepat.</p>
+
+<h2>7. Trading di Semua Pair</h2>
+<p><strong>Kesalahan:</strong> Trading di 10-15 pair sekaligus tanpa memahami karakter masing-masing pair.</p>
+<p><strong>Solusi:</strong> Fokus pada <strong>2-3 pair</strong> di awal. Pelajari karakteristiknya:</p>
+<ul>
+<li>Rata-rata range harian</li>
+<li>Jam-jam paling aktif</li>
+<li>Korelasi antar pair</li>
+<li>Spread dan biaya trading</li>
+</ul>
+<p>Pair yang direkomendasikan untuk pemula: <strong>EURUSD</strong>, <strong>GBPUSD</strong>, dan <strong>USDJPY</strong> karena spread rendah dan likuiditas tinggi.</p>
+
+<h2>8. Tidak Memiliki Trading Journal</h2>
+<p><strong>Kesalahan:</strong> Tidak mencatat trade yang dilakukan, sehingga tidak bisa mengevaluasi kesalahan dan kekuatan strategi.</p>
+<p><strong>Solusi:</strong> Catat setiap trade dengan detail:</p>
+<ul>
+<li>Tanggal dan jam entry/exit</li>
+<li>Pair, lot size, arah (buy/sell)</li>
+<li>Alasan entry (setup apa yang muncul)</li>
+<li>Hasil (profit/loss dalam $ dan pips)</li>
+<li>Screenshot chart saat entry</li>
+<li>Evaluasi: apa yang bisa diperbaiki</li>
+</ul>
+<p>Review journal Anda setiap minggu. Anda akan terkejut menemukan pola kesalahan yang berulang.</p>
+
+<h2>9. Ekspektasi Tidak Realistis</h2>
+<p><strong>Kesalahan:</strong> Mengharapkan profit 100% per bulan atau ingin "cepat kaya" dari trading. Ini mendorong pengambilan risiko berlebihan.</p>
+<p><strong>Solusi:</strong> Target yang realistis untuk trader berpengalaman adalah <strong>3-10% per bulan</strong>. Untuk pemula, target utama bukan profit — melainkan <strong>tidak kehilangan modal</strong> selama 6 bulan pertama.</p>
+<p>Jika seseorang menjanjikan profit konsisten 50%+ per bulan, itu hampir pasti scam. Bahkan hedge fund terbaik di dunia rata-rata menghasilkan 15-25% per tahun.</p>
+
+<h2>10. Trading dengan Emosi</h2>
+<p><strong>Kesalahan:</strong> Keputusan trading didorong oleh ketakutan (fear) atau keserakahan (greed):</p>
+<ul>
+<li><strong>Fear:</strong> Cut profit terlalu cepat, takut loss bertambah padahal analisis masih valid</li>
+<li><strong>Greed:</strong> Memindahkan take profit terus-menerus, menambah posisi saat sudah profit tanpa analisis</li>
+<li><strong>Revenge trading:</strong> Setelah loss, langsung buka posisi besar untuk "balas dendam"</li>
+</ul>
+<p><strong>Solusi:</strong></p>
+<ul>
+<li>Ikuti trading plan — jangan ubah di tengah jalan karena emosi</li>
+<li>Setelah loss besar, istirahat minimal 1 hari</li>
+<li>Jangan trading saat kondisi emosional (marah, sedih, euforia)</li>
+<li>Ingat: satu trade tidak menentukan karir trading Anda</li>
+</ul>
+
+<h2>Rangkuman</h2>
+<p>Kesalahan-kesalahan di atas bukan berarti Anda tidak cocok trading. Hampir semua trader sukses pernah melakukan kesalahan yang sama di awal. Bedanya, mereka <strong>belajar dari kesalahan</strong> dan <strong>memperbaiki prosesnya</strong>.</p>
+<p>Fokus pada proses, bukan pada hasil. Jika prosesnya benar (analisis matang, risk management ketat, disiplin), profit akan datang sebagai konsekuensi natural.</p>
+
+<p><em><strong>Disclaimer:</strong> Artikel ini bersifat edukatif dan bukan merupakan saran investasi. Trading forex melibatkan risiko tinggi kehilangan modal.</em></p>`,
+  },
+  {
     slug: 'tutorial-membuat-ea-expert-advisor-sendiri-mql5',
     title: 'Tutorial Membuat EA (Expert Advisor) Sendiri dengan MQL5',
     excerpt:
