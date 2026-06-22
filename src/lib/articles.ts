@@ -12,6 +12,60 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'forecast-xauusd-minggu-ini-23-27-juni-2026',
+    title: 'Forecast XAUUSD Minggu Ini (23–27 Juni 2026): Emas Berpotensi Lanjutkan Rally',
+    excerpt:
+      'Analisis teknikal dan fundamental XAUUSD untuk minggu 23–27 Juni 2026. Level support, resistance, dan skenario trading yang perlu diperhatikan.',
+    category: 'strategi',
+    date: '2026-06-22',
+    author: 'Tim TradingReview',
+    readTime: '7 menit',
+    content: `<h2>Recap Minggu Lalu</h2>
+<p>Harga emas (XAUUSD) ditutup menguat di minggu sebelumnya, dipicu oleh melemahnya Dolar AS dan ekspektasi pasar terhadap kebijakan dovish The Fed. Harga sempat menyentuh area $3,350 sebelum terkoreksi ringan ke $3,310 di penutupan Jumat.</p>
+
+<h2>Faktor Fundamental</h2>
+<h3>Kebijakan The Fed</h3>
+<p>Pasar saat ini memperkirakan kemungkinan pemangkasan suku bunga di Q3 2026 semakin besar. Data inflasi AS yang menurun dan pasar tenaga kerja yang mulai melambat memberikan ruang bagi The Fed untuk melonggarkan kebijakan moneter. Hal ini positif untuk emas sebagai aset safe haven.</p>
+
+<h3>Ketegangan Geopolitik</h3>
+<p>Ketidakpastian geopolitik global masih menjadi katalis utama penguatan emas. Investor cenderung mengalihkan dana ke aset safe haven di tengah kondisi global yang belum stabil.</p>
+
+<h3>Data Ekonomi Penting Minggu Ini</h3>
+<ul>
+<li><strong>Selasa (24 Juni):</strong> Flash PMI Manufacturing & Services AS</li>
+<li><strong>Rabu (25 Juni):</strong> CB Consumer Confidence</li>
+<li><strong>Kamis (26 Juni):</strong> GDP Final Q1, Durable Goods Orders, Initial Jobless Claims</li>
+<li><strong>Jumat (27 Juni):</strong> Core PCE Price Index (indikator inflasi favorit The Fed)</li>
+</ul>
+<p>Data <strong>Core PCE</strong> di hari Jumat akan menjadi data paling krusial minggu ini. Jika angka inflasi turun di bawah ekspektasi, emas berpotensi rally lebih lanjut.</p>
+
+<h2>Analisis Teknikal XAUUSD</h2>
+<h3>Timeframe Daily</h3>
+<p>Harga emas saat ini bergerak di atas MA 50 dan MA 200, mengkonfirmasi tren bullish yang masih kuat. RSI berada di level 62, menunjukkan momentum bullish tanpa kondisi overbought.</p>
+
+<h3>Level-Level Penting</h3>
+<ul>
+<li><strong>Resistance 1:</strong> $3,350 — level tertinggi minggu lalu</li>
+<li><strong>Resistance 2:</strong> $3,385 — target jika breakout</li>
+<li><strong>Resistance 3:</strong> $3,420 — resistance psikologis</li>
+<li><strong>Support 1:</strong> $3,290 — area demand terdekat</li>
+<li><strong>Support 2:</strong> $3,250 — support kuat (MA 50 daily)</li>
+<li><strong>Support 3:</strong> $3,200 — level psikologis dan support mayor</li>
+</ul>
+
+<h2>Skenario Trading</h2>
+<h3>Skenario Bullish (Probabilitas 60%)</h3>
+<p>Jika harga mampu breakout di atas $3,350 dengan volume kuat, target selanjutnya berada di area $3,385–$3,420. Entry buy bisa dilakukan saat pullback ke area $3,310–$3,320 dengan stop loss di bawah $3,280.</p>
+
+<h3>Skenario Bearish (Probabilitas 40%)</h3>
+<p>Jika data ekonomi AS keluar lebih kuat dari ekspektasi dan memperkuat Dolar, emas bisa terkoreksi ke area $3,250–$3,200. Entry sell bisa dipertimbangkan jika harga breakdown di bawah $3,280 dengan target $3,250.</p>
+
+<h2>Kesimpulan</h2>
+<p>Bias XAUUSD minggu ini cenderung <strong>bullish</strong> selama harga bertahan di atas support $3,290. Perhatikan rilis data Core PCE di hari Jumat sebagai katalis utama pergerakan harga. Selalu gunakan stop loss dan manajemen risiko yang ketat.</p>
+
+<p><em><strong>Disclaimer:</strong> Analisis ini bersifat edukatif dan bukan merupakan saran investasi. Selalu lakukan riset mandiri sebelum mengambil keputusan trading.</em></p>`,
+  },
+  {
     slug: 'apa-itu-forex-trading-panduan-lengkap-pemula',
     title: 'Apa Itu Forex Trading? Panduan Lengkap untuk Pemula',
     excerpt:
