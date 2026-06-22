@@ -12,6 +12,191 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'tutorial-membuat-ea-expert-advisor-sendiri-mql5',
+    title: 'Tutorial Membuat EA (Expert Advisor) Sendiri dengan MQL5',
+    excerpt:
+      'Panduan lengkap step-by-step membuat Expert Advisor pertama Anda di MetaTrader 5 menggunakan bahasa MQL5, dari nol hingga siap backtest.',
+    category: 'edukasi',
+    date: '2026-06-22',
+    author: 'Tim TradingReview',
+    readTime: '12 menit',
+    content: `<h2>Apa Itu Expert Advisor (EA)?</h2>
+<p>Expert Advisor (EA) adalah program otomatis yang berjalan di platform MetaTrader untuk mengeksekusi trading tanpa intervensi manual. EA bekerja berdasarkan aturan (rules) yang Anda tentukan — mulai dari kapan entry, exit, berapa lot, sampai stop loss dan take profit.</p>
+<p>Dengan EA, Anda bisa:</p>
+<ul>
+<li>Trading 24 jam tanpa harus duduk di depan layar</li>
+<li>Menghilangkan emosi dari keputusan trading</li>
+<li>Backtest strategi pada data historis</li>
+<li>Eksekusi order dengan kecepatan milidetik</li>
+</ul>
+
+<h2>Persiapan yang Dibutuhkan</h2>
+<ul>
+<li><strong>MetaTrader 5 (MT5):</strong> Download dan install dari broker Anda</li>
+<li><strong>MetaEditor:</strong> Sudah termasuk dalam instalasi MT5 (tekan F4 untuk membuka)</li>
+<li><strong>Akun Demo:</strong> Untuk testing tanpa risiko</li>
+<li><strong>Pemahaman dasar trading:</strong> Mengerti konsep buy, sell, lot, stop loss, take profit</li>
+</ul>
+<p>Anda <strong>tidak perlu</strong> pengalaman programming sebelumnya — tutorial ini dimulai dari nol.</p>
+
+<h2>Step 1: Membuka MetaEditor</h2>
+<p>Buka MetaTrader 5, lalu tekan <strong>F4</strong> atau klik menu <strong>Tools → MetaQuotes Language Editor</strong>. MetaEditor adalah IDE (Integrated Development Environment) khusus untuk menulis kode MQL5.</p>
+<p>Klik <strong>File → New → Expert Advisor (template)</strong>, beri nama file misalnya <strong>SimpleEA</strong>, lalu klik Next dan Finish.</p>
+
+<h2>Step 2: Memahami Struktur Dasar EA</h2>
+<p>Setiap EA MQL5 memiliki 3 fungsi utama:</p>
+<pre><code>// Fungsi yang dijalankan saat EA pertama kali dipasang di chart
+int OnInit()
+{
+   Print("EA dimulai!");
+   return(INIT_SUCCEEDED);
+}
+
+// Fungsi yang dijalankan setiap ada tick harga baru
+void OnTick()
+{
+   // Logika trading Anda di sini
+}
+
+// Fungsi yang dijalankan saat EA dilepas dari chart
+void OnDeinit(const int reason)
+{
+   Print("EA dihentikan.");
+}</code></pre>
+<ul>
+<li><strong>OnInit():</strong> Inisialisasi — setup indikator, variabel awal</li>
+<li><strong>OnTick():</strong> Jantung EA — dipanggil setiap ada pergerakan harga baru</li>
+<li><strong>OnDeinit():</strong> Cleanup — membersihkan resource saat EA dimatikan</li>
+</ul>
+
+<h2>Step 3: Membuat EA Moving Average Crossover</h2>
+<p>Kita akan membuat EA sederhana dengan strategi <strong>MA Crossover</strong>: Buy ketika MA cepat (periode 10) memotong ke atas MA lambat (periode 50), dan Sell sebaliknya.</p>
+<pre><code>// Input parameters — bisa diubah tanpa edit kode
+input int FastMA_Period = 10;       // Periode MA Cepat
+input int SlowMA_Period = 50;       // Periode MA Lambat
+input double LotSize = 0.01;        // Ukuran Lot
+input int StopLoss = 100;           // Stop Loss (points)
+input int TakeProfit = 200;         // Take Profit (points)
+input int MagicNumber = 12345;      // ID unik EA
+
+#include &lt;Trade/Trade.mqh&gt;
+CTrade trade;
+
+int handleFast, handleSlow;
+
+int OnInit()
+{
+   handleFast = iMA(_Symbol, PERIOD_CURRENT, FastMA_Period, 0, MODE_EMA, PRICE_CLOSE);
+   handleSlow = iMA(_Symbol, PERIOD_CURRENT, SlowMA_Period, 0, MODE_EMA, PRICE_CLOSE);
+
+   if(handleFast == INVALID_HANDLE || handleSlow == INVALID_HANDLE)
+   {
+      Print("Error membuat indikator MA!");
+      return(INIT_FAILED);
+   }
+
+   trade.SetExpertMagicNumber(MagicNumber);
+   return(INIT_SUCCEEDED);
+}</code></pre>
+
+<h3>Logika Trading di OnTick()</h3>
+<pre><code>void OnTick()
+{
+   // Ambil nilai MA
+   double fastMA[], slowMA[];
+   ArraySetAsSeries(fastMA, true);
+   ArraySetAsSeries(slowMA, true);
+
+   CopyBuffer(handleFast, 0, 0, 3, fastMA);
+   CopyBuffer(handleSlow, 0, 0, 3, slowMA);
+
+   // Cek crossover
+   bool bullishCross = fastMA[1] &gt; slowMA[1] &amp;&amp; fastMA[2] &lt;= slowMA[2];
+   bool bearishCross = fastMA[1] &lt; slowMA[1] &amp;&amp; fastMA[2] &gt;= slowMA[2];
+
+   // Cek apakah sudah ada posisi terbuka
+   bool hasPosition = false;
+   for(int i = PositionsTotal() - 1; i &gt;= 0; i--)
+   {
+      if(PositionGetSymbol(i) == _Symbol &amp;&amp;
+         PositionGetInteger(POSITION_MAGIC) == MagicNumber)
+      {
+         hasPosition = true;
+         break;
+      }
+   }
+
+   double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+   double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   double point = SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+
+   // Entry Buy
+   if(bullishCross &amp;&amp; !hasPosition)
+   {
+      double sl = ask - StopLoss * point;
+      double tp = ask + TakeProfit * point;
+      trade.Buy(LotSize, _Symbol, ask, sl, tp, "MA Cross Buy");
+   }
+
+   // Entry Sell
+   if(bearishCross &amp;&amp; !hasPosition)
+   {
+      double sl = bid + StopLoss * point;
+      double tp = bid - TakeProfit * point;
+      trade.Sell(LotSize, _Symbol, bid, sl, tp, "MA Cross Sell");
+   }
+}</code></pre>
+
+<h2>Step 4: Compile dan Pasang EA</h2>
+<ol>
+<li>Di MetaEditor, tekan <strong>F7</strong> atau klik <strong>Compile</strong></li>
+<li>Pastikan tidak ada error (warning boleh diabaikan)</li>
+<li>Kembali ke MetaTrader 5 (tekan F4)</li>
+<li>Di panel <strong>Navigator</strong>, buka folder <strong>Expert Advisors</strong></li>
+<li><strong>Drag &amp; drop</strong> EA ke chart yang diinginkan</li>
+<li>Centang <strong>"Allow Algo Trading"</strong> di pengaturan</li>
+<li>Klik <strong>OK</strong></li>
+</ol>
+<p>Pastikan tombol <strong>"Algo Trading"</strong> di toolbar MetaTrader dalam keadaan aktif (hijau).</p>
+
+<h2>Step 5: Backtest EA Anda</h2>
+<p>Sebelum trading real, selalu backtest dulu:</p>
+<ol>
+<li>Buka <strong>Strategy Tester</strong> (Ctrl+R)</li>
+<li>Pilih EA Anda dari dropdown</li>
+<li>Pilih symbol (misalnya EURUSD)</li>
+<li>Set periode backtest (misalnya 1 tahun)</li>
+<li>Pilih model: <strong>"Every tick based on real ticks"</strong> untuk akurasi terbaik</li>
+<li>Klik <strong>Start</strong></li>
+</ol>
+<p>Perhatikan metrik penting dari hasil backtest:</p>
+<ul>
+<li><strong>Profit Factor:</strong> Harus di atas 1.5 untuk strategi yang layak</li>
+<li><strong>Maximum Drawdown:</strong> Idealnya di bawah 20%</li>
+<li><strong>Total Trades:</strong> Minimal 100 trade untuk hasil yang signifikan</li>
+<li><strong>Win Rate:</strong> Dikombinasikan dengan risk-reward ratio</li>
+</ul>
+
+<h2>Tips Pengembangan EA Selanjutnya</h2>
+<ul>
+<li><strong>Tambahkan filter tren:</strong> Gunakan indikator tambahan (RSI, ADX) untuk menghindari sinyal palsu</li>
+<li><strong>Trailing Stop:</strong> Geser stop loss mengikuti harga untuk mengamankan profit</li>
+<li><strong>Time Filter:</strong> Batasi jam trading untuk menghindari sesi dengan spread tinggi</li>
+<li><strong>Risk Management:</strong> Hitung lot otomatis berdasarkan persentase risiko dari balance</li>
+<li><strong>Multi-timeframe:</strong> Konfirmasi sinyal dari timeframe yang lebih besar</li>
+</ul>
+
+<h2>Kesalahan Umum Pemula</h2>
+<ul>
+<li><strong>Tidak backtest:</strong> Langsung trading real tanpa testing</li>
+<li><strong>Over-optimization:</strong> Terlalu banyak parameter yang di-optimasi sehingga hanya cocok untuk data historis</li>
+<li><strong>Mengabaikan spread:</strong> EA yang profitable di backtest bisa rugi karena spread tidak diperhitungkan</li>
+<li><strong>Tanpa stop loss:</strong> EA tanpa proteksi bisa menghapus seluruh akun</li>
+</ul>
+
+<p><em><strong>Disclaimer:</strong> Tutorial ini bersifat edukatif. Selalu test EA di akun demo terlebih dahulu sebelum digunakan di akun real. Past performance tidak menjamin hasil di masa depan.</em></p>`,
+  },
+  {
     slug: 'forecast-xauusd-minggu-ini-23-27-juni-2026',
     title: 'Forecast XAUUSD Minggu Ini (23–27 Juni 2026): Emas Berpotensi Lanjutkan Rally',
     excerpt:
